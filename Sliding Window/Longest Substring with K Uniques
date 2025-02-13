@@ -1,0 +1,42 @@
+// https://www.geeksforgeeks.org/problems/longest-k-unique-characters-substring0853/1
+
+// Similar to
+// 340. Longest Substring with At Most K Distinct Characters
+// https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/
+
+class Solution {
+    public int longestkSubstr(String s, int k) {
+        Map<Character, Integer> hm = new HashMap<>();
+        int l = 0;
+        int unique = 0;
+        int max = 0;
+        
+        for(int r=0;r<s.length();r++) {
+            char ch = s.charAt(r);
+            
+            if(hm.containsKey(ch)) {
+                hm.put(ch, hm.get(ch)+1);
+            }
+            else {
+                hm.put(ch, 1);
+                unique++;
+            }
+            
+            while (unique > k) {
+                char ch2 = s.charAt(l++);
+                int count = hm.get(ch2);
+                if(count == 1) {
+                    hm.remove(ch2);
+                    unique--;
+                }
+                else
+                    hm.put(ch2, count-1);
+            }
+            
+            if(unique == k)
+                max = Math.max(r-l+1, max);
+        }
+        
+        return max == 0 ? -1 : max;
+    }
+}
