@@ -1,3 +1,5 @@
+// https://leetcode.com/problems/maximum-average-subarray-i/
+
 class Solution {
     public int minSubArrayLen(int target, int[] nums) {
         int l, r;
