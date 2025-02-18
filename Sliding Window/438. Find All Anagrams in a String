@@ -1,0 +1,58 @@
+// https://leetcode.com/problems/find-all-anagrams-in-a-string/
+
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        int map1[] = new int[26];
+        int map2[] = new int[26];
+        int l = 0;
+        List<Integer> indices = new ArrayList<>();
+        int matches = 0;
+
+        if(p.length() > s.length())
+            return indices;
+
+        for(int i=0;i<p.length();i++) {
+            char ch = p.charAt(i);
+            map1[ch - 'a']++;
+
+            char ch2 = s.charAt(i);
+            map2[ch2 - 'a']++;
+        }
+
+        matches = countMatches(map1, map2);
+        if(matches == 26)
+            indices.add(l);
+
+        for(int r=p.length();r<s.length();r++) {
+            char ch = s.charAt(r);
+            map2[ch - 'a']++;
+            if(map2[ch - 'a'] == map1[ch - 'a'])
+                matches++;
+            else if(map2[ch - 'a'] - 1 == map1[ch - 'a'])
+                matches--;
+
+            char ch2 = s.charAt(l++);
+            map2[ch2 - 'a']--;
+            if(map2[ch2 - 'a'] == map1[ch2 - 'a'])
+                matches++;
+            else if(map2[ch2 - 'a'] + 1 == map1[ch2 - 'a'])
+                matches--;
+
+            if(matches == 26)
+                indices.add(l);
+        }
+
+        return indices;
+    }
+
+    int countMatches(int map1[], int map2[]) {
+        int matches = 0;
+
+        for(char i = 'a'; i <= 'z'; i++) {
+            if(map2[i - 'a'] == map1[i - 'a'])
+                matches++;
+        }
+
+        return matches;
+    }
+}
