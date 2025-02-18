@@ -1,0 +1,60 @@
+// https://leetcode.com/problems/permutation-in-string/
+// Using arrays instead of hashmap reduces runtime from 45ms to 9ms
+
+class Solution {
+    public boolean checkInclusion(String s1, String s2) {
+        int l = 0;
+        int matches = 0;
+
+        int map1[] = new int[26];
+        int map2[] = new int[26];
+
+        for(int i=0;i<s1.length();i++) {
+            char ch = s1.charAt(i);
+
+            map1[ch - 'a']++;
+        }
+
+        for(int r=0; r<s2.length(); r++) {
+            char ch = s2.charAt(r);
+
+            map2[ch-'a']++;
+
+            if(map1[ch - 'a'] == map2[ch - 'a'])
+                matches++;
+            else if(map1[ch - 'a'] == map2[ch - 'a'] - 1)
+                matches--;
+
+            if(r-l+1 > s1.length()) {
+                char ch2 = s2.charAt(l++);
+
+                if(map1[ch2 - 'a']  == map2[ch2 - 'a'])
+                    matches--;
+                else if(map1[ch2 - 'a']  == map2[ch2 - 'a'] - 1)
+                    matches++;
+
+                map2[ch2 - 'a']--;
+            }
+
+            if(r == s1.length() - 1) {
+                matches = countMatches(map1, map2);
+            }
+
+            if(matches == 26)
+                return true;
+        }
+
+        return false;
+    }
+
+    int countMatches(int map1[], int map2[]) {
+        int count = 0;
+
+        for(char i = 'a'; i<='z'; i++) {
+            if(map1[i - 'a'] == map2[i - 'a'])
+                count++;
+        }
+
+        return count;
+    }
+}
