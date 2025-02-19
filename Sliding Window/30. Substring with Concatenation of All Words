@@ -1,0 +1,50 @@
+// https://leetcode.com/problems/substring-with-concatenation-of-all-words/
+
+class Solution {
+    public List<Integer> findSubstring(String s, String[] words) {
+        int wordLen = words[0].length();
+        int l;
+        int total;
+        Map<String, Integer> fixed = new HashMap<>();
+        Map<String, Integer> dynamic = new HashMap<>();
+        List<Integer> indices = new ArrayList<>();
+
+        for(String str : words) {
+            fixed.put(str, fixed.getOrDefault(str, 0) + 1);
+        }
+
+        for(int i=0; i<wordLen;i++) {
+            dynamic.clear();
+            l = i;
+            total = 0;
+            for(int r=i;r<s.length();r+=wordLen) {
+                if(r+wordLen > s.length())
+                    break;
+                
+                String str = s.substring(r, r+wordLen);
+                dynamic.put(str, dynamic.getOrDefault(str, 0) + 1);
+                total++;
+
+                if(total > words.length) {
+                    if(l+wordLen > s.length())
+                        break;
+                    
+                    String str2 = s.substring(l, l+wordLen);
+
+                    if(dynamic.get(str2) > 1)
+                        dynamic.put(str2, dynamic.get(str2) - 1);
+                    else
+                        dynamic.remove(str2);
+                    
+                    l += wordLen;
+                    total--;
+                }
+
+                if(fixed.equals(dynamic))
+                    indices.add(l);
+            }
+        }
+
+        return indices;
+    }
+}
