@@ -1,0 +1,41 @@
+// https://leetcode.com/problems/3sum/
+
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        Arrays.sort(nums);
+
+        List<List<Integer>> triples = new ArrayList<>();
+
+        int l, r;
+
+        for(int i=0;i<nums.length;i++) {
+            if(i>0 && nums[i-1] == nums[i])
+                continue;
+            l=i+1; r=nums.length-1;
+            while(l<r) {
+                int sum = nums[l]+nums[r];
+                if(nums[i]+sum == 0) {
+                    triples.add(new ArrayList<Integer>(Arrays.asList(nums[i], nums[l],nums[r])));
+                    int v = nums[r];
+                    while(r>=0 && nums[r] == v)
+                        r--;
+                    v = nums[l];
+                    while(l<nums.length && nums[l] == v)
+                        l++;
+                }
+                else if(nums[i]+sum > 0){
+                    int v = nums[r];
+                    while(r>=0 && nums[r] == v)
+                        r--;
+                }
+                else {
+                    int v = nums[l];
+                    while(l<nums.length && nums[l] == v)
+                        l++;
+                }
+            }
+        }
+
+        return triples;
+    }
+}
